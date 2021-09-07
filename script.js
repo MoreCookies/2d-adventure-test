@@ -9,7 +9,7 @@ var currentDir = null;
 let speed = 5;
 var colliding = false;
 var blocks = [];
-var blockPriority = {"grass":1, "rock":2, "water":0};
+var blockPriority = {"grass":1, "rock":3, "water":0, "berry":2};
 var health = 100;
 var maxHealth = 100;
 
@@ -20,13 +20,14 @@ function preload() {
 	waterImg = loadImage("blocks/Water.png")
   rockImg = loadImage("blocks/ronk.png")
 	borderImg = loadImage("Border.png")
+	berryImg = loadImage("berry-bush.png")
 }
 
 function setup() {
 	createCanvas(wWidth, wHeight);
   
-  for(var x = 0; x < 11; x++) {
-    for(var y = 0; y < 11; y++) {
+  for(var x = 0; x < 15; x++) {
+    for(var y = 0; y < 15; y++) {
       blocks.push(new block(50, 50, x*50, y*50, speed, false, grassImg, "grass"));
     }
   }
@@ -35,9 +36,15 @@ function setup() {
       blocks.push(new block(50, 50, x*50, y*50, speed, true, rockImg, "rock"));
     }
   }
-  for(var x = -15; x < 15; x++) {
-    for(var y = -25; y < 25; y++) {
+  for(var x = -15; x < 30; x++) {
+    for(var y = -25; y < 30; y++) {
       blocks.push(new block(50, 50, x*50, y*50, speed, true, waterImg, "water"));
+    }
+  }
+
+	for(var x = 0; x < 0; x++) {
+  for(var y = 0; y < 0; y++) {
+      blocks.push(new block(50, 50, x*50, y*50, speed, false, berryImg, "berry"));
     }
   }
   
@@ -92,7 +99,7 @@ function draw() {
 			currentDir = keyCode;
 			if (currentDir == UP_ARROW) {
 				//up
-				movementBlock = new block(50, 50, (wWidth / 2), (wHeight / 2) - 50, speed, false, waterImg, "move");
+				movementBlock = new block(50, 50, (wWidth / 2), (wHeight / 2) - 50, speed, false, borderImg, "move");
 				characterY += 1;
 				for (var a = 0; a < blocks.length; a++) {
 					//if move up, is the coords of the player the same as the block? if so, don't move.
@@ -105,7 +112,7 @@ function draw() {
 				}
 			} else if (currentDir == DOWN_ARROW) {
 				//down
-				movementBlock = new block(50, 50, (wWidth / 2), (wHeight / 2) + 50, speed, false, waterImg, "move");
+				movementBlock = new block(50, 50, (wWidth / 2), (wHeight / 2) + 50, speed, false, borderImg, "move");
 				characterY -= 1;
 				for (var b = 0; b < blocks.length; b++) {
 					if (blocks[b].collidable == true) {
@@ -117,7 +124,7 @@ function draw() {
 				}
 			} else if (currentDir == LEFT_ARROW) {
 				//left
-				movementBlock = new block(50, 50, (wWidth / 2) - 50, (wHeight / 2), speed, false, waterImg, "move");
+				movementBlock = new block(50, 50, (wWidth / 2) - 50, (wHeight / 2), speed, false, borderImg, "move");
 				characterX += 1;
 				for (var c = 0; c < blocks.length; c++) {
 					//if move up, is the coords of the player the same as the block? if so, don't move.
@@ -130,7 +137,7 @@ function draw() {
 				}
 			} else if (currentDir == RIGHT_ARROW) {
 				//right
-				movementBlock = new block(50, 50, (wWidth / 2) + 50, (wHeight / 2), speed, false, waterImg, "move");
+				movementBlock = new block(50, 50, (wWidth / 2) + 50, (wHeight / 2), speed, false, borderImg, "move");
 				characterX -= 1;
 				for (var d = 0; d < blocks.length; d++) {
 					//if move up, is the coords of the player the same as the block? if so, don't move.
