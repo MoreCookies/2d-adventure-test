@@ -1,0 +1,17 @@
+make more wildlife
+
+make combat system
+-add atributes to enemies
+--health
+--damage
+--speed
+--spawn location
+--interval between random movement
+--attack speed
+--lootable
+
+inventory
+-dropping items
+-pick up items
+-equipment
+--player attributes

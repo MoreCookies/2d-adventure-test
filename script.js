@@ -1,109 +1,164 @@
- var scrollX = 0;
-var scrollY = 0;
-var wWidth = 1000;
-var wHeight = 1000;
+var characterX = 0;
+var characterY = 0;
+var wWidth = 500;
+var wHeight = 500;
 var fr = 30;
 var moving = false;
 let fCount = 0;
 var currentDir = null;
 let speed = 5;
-class block {
-  constructor(w, h, offsetx, offsety, speedT, color) {
-    this.width = w;
-    this.height = h;
-    this.osX = offsetx-speedT/16;
-    this.osY = offsety-speedT/16;
-    this.coordX = round((this.osX-(wWidth/2))/(50*-1));
-    this.coordY = round((this.osY-(wHeight/2))/(50*-1));
-    this.color = color;
-    console.log("X coord: " + this.coordX + " Y coord: " + this.coordY)
-  }
-  
-  update(key, spd) {
-    //listens for keypressed
-    if(key == UP_ARROW) {
-      //up
-      this.osY += 50/spd;
-    } else if(key == DOWN_ARROW) {
-      //down
-      this.osY -= 50/spd;
-    } else if(key == LEFT_ARROW) {
-      //left
-      this.osX += 50/spd;
-    } else if(key == RIGHT_ARROW) {
-      //right
-      this.osX -= 50/spd;
-    }
-  }
-  display(doFill) {
-    if(doFill) {
-      fill(this.color);
-    } else {
-      stroke(5);
-      noFill();
-    }
-    rectMode(CENTER);
-    rect(this.osX, this.osY, this.width, this.height)
-  }
-  
-}
+var colliding = false;
+var blocks = [];
+var blockPriority = {"grass":1, "rock":2, "water":0};
+var health = 100;
+var maxHealth = 100;
+
 
 function preload() {
-  character = loadImage("character.png")
+	character = loadImage("character.png")
+	grassImg = loadImage("blocks/Grass.png")
+	waterImg = loadImage("blocks/Water.png")
+  rockImg = loadImage("blocks/ronk.png")
+	borderImg = loadImage("Border.png")
 }
 
 function setup() {
-  createCanvas(wWidth, wHeight);
-  testBlock = new block(50, 50, 100, 100, speed, "green");
-  testBlock2 = new block(50, 50, 150, 150, speed, "green");
-  frameRate(fr);
-}
-
-function draw() {
-  if(moving == true) {
-    fCount += 1;
+	createCanvas(wWidth, wHeight);
+  
+  for(var x = 0; x < 11; x++) {
+    for(var y = 0; y < 11; y++) {
+      blocks.push(new block(50, 50, x*50, y*50, speed, false, grassImg, "grass"));
+    }
   }
-  //player :)
-  background("yellow");
-  rectMode(CENTER);
-  fill("green");
-  imageMode(CENTER)
-  
-  testBlock.display(true)
-  
-  testBlock2.display(true)
-  if(keyIsPressed && moving == false) {
-    moving = true;
-    currentDir = keyCode;
-    movementBlock2 = new block(50, 50, wWidth/2, wHeight/2, speed, "cyan");
-    if(currentDir == UP_ARROW) {
-      //up
-      movementBlock = new block(50, 50, (wWidth/2), (wHeight/2)-50, speed, "cyan");
-    } else if(currentDir == DOWN_ARROW) {
-      //down
-      movementBlock = new block(50, 50, (wWidth/2), (wHeight/2)+50, speed, "cyan");
-    } else if(currentDir == LEFT_ARROW) {
-      //left
-      movementBlock = new block(50, 50, (wWidth/2)-50, (wHeight/2), speed, "cyan");
-    } else if(currentDir == RIGHT_ARROW) {
-      //right
-      movementBlock = new block(50, 50, (wWidth/2)+50, (wHeight/2), speed, "cyan");
+  for(var x = 0; x < 3; x++) {
+    for(var y = 0; y < 3; y++) {
+      blocks.push(new block(50, 50, x*50, y*50, speed, true, rockImg, "rock"));
+    }
+  }
+  for(var x = -15; x < 15; x++) {
+    for(var y = -25; y < 25; y++) {
+      blocks.push(new block(50, 50, x*50, y*50, speed, true, waterImg, "water"));
     }
   }
   
-  if(fCount >= speed) {
-    fCount = 0;
-    moving = false;
+  // TARGET SPOTTED, WATER DELETING DOESNT WORK PROPERLY
+  // SOLUTION INSTEAD OF LIKE BURNING YOUR COMPUTER MAKE WATER WITH THE GRASS FOR LESS SADNESS AND STUFF HOWEVER WILL MAKE IT A LOT LESS CONVENIENT AND EASY TO USE I GUESS LMAO
+  
+  for(var n = 0; n < blocks.length; n++) {
+    if(blocks[n].blockImg == waterImg) {
+      for(var f = 0; f < blocks.length; f++) {
+        if(blocks[n].coordX == blocks[f].coordX && blocks[n].coordY == blocks[f].coordY && blocks[n].blockImg != blocks[f].blockImg) {
+          //the blocks are different images, but are overlapping. delete the one that has the water img
+          if(blockPriority[blocks[n].type] > blockPriority[blocks[f].type]) {
+            blocks.splice(f, 1);
+          } else {
+            blocks.splice(n, 1);
+          }
+          if(blocks[n].coordX == 15 && blocks[n].coordY == 2) {
+            console.log(blocks[n])
+          }
+        }
+      }
+    }
   }
-  if(moving == true && fCount < speed) {
-    testBlock.update(currentDir, speed)
-    testBlock2.update(currentDir, speed)
-    //note, make player about the size of 1 unit, when done so, change the values in the rects below to 75 cuz 50/2 + 25 so ye
-    movementBlock.display(true)
-    movementBlock.update(currentDir, speed);
-    movementBlock2.display(false);
-    movementBlock2.update(currentDir, speed);
-    console.log(movementBlock.osX)
-  }
-  image(character, wWidth/2, wHeight/2, 50, 50);
+  
+  console.log("done")
+
+	frameRate(fr);
+}
+
+function draw() {
+	if (moving == true) {
+		fCount += 1;
+	}
+	//player :)
+	background("cyan");
+	rectMode(CENTER);
+	imageMode(CENTER)
+	for (var i = 0; i < blocks.length; i++) {
+		blocks[i].display()
+	}
+  noFill();
+  stroke(20);
+  rect(90, 25, 150, 25)
+  rectMode(CORNER);
+  fill("red")
+  noStroke();
+  rect(15, 12.5, 150/(maxHealth/health), 25)
+  noFill();
+	if (keyIsPressed && moving == false) {
+		if (keyCode == UP_ARROW || keyCode == DOWN_ARROW || keyCode == LEFT_ARROW || keyCode == RIGHT_ARROW) {
+			moving = true;
+			currentDir = keyCode;
+			if (currentDir == UP_ARROW) {
+				//up
+				movementBlock = new block(50, 50, (wWidth / 2), (wHeight / 2) - 50, speed, false, waterImg, "move");
+				characterY += 1;
+				for (var a = 0; a < blocks.length; a++) {
+					//if move up, is the coords of the player the same as the block? if so, don't move.
+					if (blocks[a].collidable == true) {
+						if (characterX == blocks[a].coordX && characterY == blocks[a].coordY) {
+							moving = false;
+							characterY -= 1;
+						}
+					}
+				}
+			} else if (currentDir == DOWN_ARROW) {
+				//down
+				movementBlock = new block(50, 50, (wWidth / 2), (wHeight / 2) + 50, speed, false, waterImg, "move");
+				characterY -= 1;
+				for (var b = 0; b < blocks.length; b++) {
+					if (blocks[b].collidable == true) {
+						if (characterX == blocks[b].coordX && characterY == blocks[b].coordY) {
+							moving = false;
+							characterY += 1;
+						}
+					}
+				}
+			} else if (currentDir == LEFT_ARROW) {
+				//left
+				movementBlock = new block(50, 50, (wWidth / 2) - 50, (wHeight / 2), speed, false, waterImg, "move");
+				characterX += 1;
+				for (var c = 0; c < blocks.length; c++) {
+					//if move up, is the coords of the player the same as the block? if so, don't move.
+					if (blocks[c].collidable == true) {
+						if (characterX == blocks[c].coordX && characterY == blocks[c].coordY) {
+							moving = false;
+							characterX -= 1;
+						}
+					}
+				}
+			} else if (currentDir == RIGHT_ARROW) {
+				//right
+				movementBlock = new block(50, 50, (wWidth / 2) + 50, (wHeight / 2), speed, false, waterImg, "move");
+				characterX -= 1;
+				for (var d = 0; d < blocks.length; d++) {
+					//if move up, is the coords of the player the same as the block? if so, don't move.
+					if (blocks[d].collidable == true) {
+						if (characterX == blocks[d].coordX && characterY == blocks[d].coordY) {
+							moving = false;
+							characterX += 1;
+						}
+					}
+				}
+			}
+		}
+    
+	}
+
+	if (fCount >= speed) {
+		fCount = 0;
+		moving = false;
+	}
+	if (moving == true && fCount < speed && colliding == false) {
+		for (var i = 0; i < blocks.length; i++) {
+			blocks[i].update(currentDir, speed);
+		}
+		//note, make player about the size of 1 unit, when done so, change the values in the rects below to 75 cuz 50/2 + 25 so ye
+		movementBlock.display()
+		movementBlock.update(currentDir, speed);
+	}
+	image(character, wWidth / 2, wHeight / 2, 80, 80);
+	playerCoords = "X: " + characterX.toString() + " Y: " + characterY.toString();
+	text(playerCoords, 100, 100)
 }
