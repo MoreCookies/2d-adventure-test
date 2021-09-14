@@ -1,5 +1,5 @@
 class block {
-	constructor(w, h, offsetx, offsety, speedT, collidable, blockImg, type) {
+	constructor(w, h, offsetx, offsety, speedT, collidable, blockImg, type, interactable) {
 		this.width = w;
 		this.height = h;
 		this.osX = (offsetx - speedT / 16);
@@ -10,9 +10,8 @@ class block {
     this.coordX = round((this.osX - (wWidth / 2)) / (50 * -1));
 		this.coordY = round((this.osY - (wHeight / 2)) / (50 * -1));
     this.type = type;
-    
+    this.interactable = interactable;
 		
-		this.color = color;
 		this.collidable = collidable;
     this.blockImg = blockImg;
 		//console.log("X coord: " + this.coordX + " Y coord: " + this.coordY)

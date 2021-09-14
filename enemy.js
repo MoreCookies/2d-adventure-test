@@ -1,9 +1,15 @@
-class enemy {
-  constructor(hp, dmg, moveInterval, attackSpd, img, osX, osY, speedT) {
+class enemy extends block {
+  constructor(hp, dmg, moveInterval, attackSpd, img, osX, osY, speedT, w, h, type) {
+    super(w, h, osX, osY, speedT, true, img, type);
     this.hp = hp;
     this.dmg = dmg;
-    this.osX = (offsetx - speedT / 16);
-		this.osY = (offsety - speedT / 16);
+    this.moveSpd = moveInterval;
+    this.atkSpd = attackSpd;
+    this.enemyImg = img;
+    this.moving = false;
+  }
+
+  move() {
     
   }
 }
