@@ -7,13 +7,15 @@ var moving = false;
 let fCount = 0;
 var currentDir = null;
 let speed = fr / 5;
-var colliding = false;
 var blocks = [];
 var blockPriority = { "grass": 1, "rock": 3, "water": 0, "berry": 2 };
 var health = 100;
 var maxHealth = 100;
 var randomObject = 0;
-
+var menuButton = 0;
+var buttons = [];
+var buttonDisplays = [];
+var currentState = "idle";
 function preload() {
   character = loadImage("character.png")
   grassImg = loadImage("blocks/Grass.png")
@@ -21,9 +23,14 @@ function preload() {
   rockImg = loadImage("blocks/ronk.png")
   borderImg = loadImage("Border.png")
   berryImg = loadImage("blocks/berry-bush.png")
+  invButtonImg = loadImage("menu/inventory-icon.png")
+  menuBackground = loadImage("menu/menu-background.png")
+  xImg = loadImage("menu/close.png")
 }
 
 function setup() {
+  menuButton = new button(75, 75, 15, 50, invButtonImg, "inventory");
+  buttons.push(menuButton);
   createCanvas(wWidth, wHeight);
 
   for (var x = 0; x < 12; x++) {
@@ -77,12 +84,14 @@ function setup() {
 
   frameRate(fr);
 }
-
+//open menu 
 function draw() {
   if (moving == true) {
     fCount += 1;
   }
-  
+  if(moving == false) {
+    currentDir = keyCode;
+  }
   background("cyan");
   rectMode(CENTER);
   imageMode(CENTER)
@@ -109,7 +118,7 @@ function draw() {
     fCount = 0;
     moving = false;
   }
-  if (moving == true && fCount < speed && colliding == false) {
+  if (moving == true && fCount < speed) {
     //updates all blocks, in the currentdir in case like the player is moving or smth
     for (var i = 0; i < blocks.length; i++) {
       blocks[i].update(currentDir, speed);
@@ -120,7 +129,7 @@ function draw() {
   }
   for(var i = 0; i < blocks.length; i++) {
     if(blocks[i].interactable == true) {
-      if(Math.abs(blocks[i].coordX-characterX) == 1 && Math.abs(blocks[i].coordX-characterX)) {
+      if(Math.abs(blocks[i].coordX-characterX) == 1 && Math.abs(blocks[i].coordY-characterY)) {
         //player is near an interactable thing
       }
     }
@@ -139,13 +148,24 @@ function draw() {
   }
   //player :)
   image(character, wWidth / 2, wHeight / 2, 80, 80);
-  playerCoords = "X: " + characterX.toString() + " Y: " + characterY.toString();
-  text(playerCoords, wWidth - 100, wHeight - 100)
   rectMode(CORNER);
   stroke("black")
   fill("red")
-  
-  rect(100, 100, 75, 75);
+  for(var i = 0; i < buttons.length; i++) {
+    buttons[i].display();
+    if(buttons[i].buttonCheck((buttons[i].w + buttons[i].h / 2)/10)) {
+      //check the button type
+      //do whatever is needed based on the button type
+      if(buttons[i].type == "inventory") {
+        currentState = "inventory"
+        
+        
+      }
+    }
+  }
+  if(currentState == "inventory") {
+    imageMode(CORNER);
+    image(menuBackground, 150, 50, 700, 400)
+  }
   noFill();
-  text("open menu", 110, 130)
 }
