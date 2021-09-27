@@ -15,17 +15,24 @@ var randomObject = 0;
 var menuButton = 0;
 var buttons = [];
 var buttonDisplays = [];
-var currentState = "idle";
+var invButtons = [];
+//define state const values
+const IDLE = 1;
+const INVENTORY = 2;
+//current state
+var currentState = IDLE;
+
 function preload() {
-  character = loadImage("character.png")
-  grassImg = loadImage("blocks/Grass.png")
-  waterImg = loadImage("blocks/Water.png")
-  rockImg = loadImage("blocks/ronk.png")
-  borderImg = loadImage("Border.png")
-  berryImg = loadImage("blocks/berry-bush.png")
-  invButtonImg = loadImage("menu/inventory-icon.png")
-  menuBackground = loadImage("menu/menu-background.png")
-  xImg = loadImage("menu/close.png")
+  character = loadImage("character.png");
+  grassImg = loadImage("blocks/Grass.png");
+  waterImg = loadImage("blocks/Water.png");
+  rockImg = loadImage("blocks/ronk.png");
+  borderImg = loadImage("Border.png");
+  berryImg = loadImage("blocks/berry-bush.png");
+  invButtonImg = loadImage("menu/inventory-icon.png");
+  menuBackground = loadImage("menu/menu-background.png");
+  xImg = loadImage("menu/close.png");
+  xImg.resize(50, 50);
 }
 
 function setup() {
@@ -41,8 +48,8 @@ function setup() {
 
   for (var x = 0; x < 12; x++) {
     for (var y = 0; y < 12; y++) {
-      randomObject = round(random(0.5, 10))
-      if (randomObject == 6) {
+      randomObject = round(random(0.5, 10));
+      if (randomObject == 6 && x != characterX && y != characterY) {
         blocks.push(new block(50, 50, x * 50, y * 50, speed, true, berryImg, "berry", true));
       }
     }
@@ -53,7 +60,7 @@ function setup() {
       blocks.push(new block(50, 50, x * 50, y * 50, speed, true, rockImg, "rock", false));
     }
   }
-  for (var x = -15; x < 20; x++) {
+  for (var x = -15; x < 25; x++) {
     for (var y = -25; y < 20; y++) {
       blocks.push(new block(50, 50, x * 50, y * 50, speed, true, waterImg, "water", false));
     }
@@ -63,7 +70,7 @@ function setup() {
 
   // TARGET SPOTTED, WATER DELETING DOESNT WORK PROPERLY
   // SOLUTION INSTEAD OF LIKE BURNING YOUR COMPUTER MAKE WATER WITH THE GRASS FOR LESS SADNESS AND STUFF HOWEVER WILL MAKE IT A LOT LESS CONVENIENT AND EASY TO USE I GUESS LMAO
-
+  //removes all overlapping blocks :)
   for (var n = 0; n < blocks.length; n++) {
     for (var f = 0; f < blocks.length; f++) {
       if (blocks[n].coordX == blocks[f].coordX && blocks[n].coordY == blocks[f].coordY && blocks[n].blockImg != blocks[f].blockImg) {
@@ -74,66 +81,72 @@ function setup() {
           blocks.splice(n, 1);
         }
         if (blocks[n].coordX == 15 && blocks[n].coordY == 2) {
-          console.log(blocks[n])
+          console.log(blocks[n]);
         }
       }
     }
   }
 
-  console.log("done")
+  console.log("done");
 
   frameRate(fr);
 }
 //open menu 
 function draw() {
+
+  if (fCount >= speed) {
+    fCount = 0;
+    moving = false;
+  }
   if (moving == true) {
     fCount += 1;
   }
-  if(moving == false) {
+  if (moving == false) {
     currentDir = keyCode;
+  }
+  if (moving == false) {
+    collisionDetection();
   }
   background("cyan");
   rectMode(CENTER);
-  imageMode(CENTER)
+  imageMode(CENTER);
   for (var i = 0; i < blocks.length; i++) {
     blocks[i].display()
   }
   //health bar
   noFill();
   stroke(20);
-  rect(90, 25, 150, 25)
+  rect(90, 25, 150, 25);
   rectMode(CORNER);
-  fill("red")
+  fill("red");
   noStroke();
-  rect(15, 12.5, 150 / (maxHealth / health), 25)
+  rect(15, 12.5, 150 / (maxHealth / health), 25);
   noFill();
   //
 
   //collision detection B)
-  collisionDetection()
+
   //
 
   //update everything in array blocks
-  if (fCount >= speed) {
-    fCount = 0;
-    moving = false;
-  }
-  if (moving == true && fCount < speed) {
+  if (moving == true && fCount < speed && currentState == IDLE) {
     //updates all blocks, in the currentdir in case like the player is moving or smth
     for (var i = 0; i < blocks.length; i++) {
       blocks[i].update(currentDir, speed);
     }
     //note, make player about the size of 1 unit, when done so, change the values in the rects below to 75 cuz 50/2 + 25 so ye
-    movementBlock.display()
-    movementBlock.update(currentDir, speed);
+    //movementBlock.display();
+    //movementBlock.update(currentDir, speed);
   }
-  for(var i = 0; i < blocks.length; i++) {
-    if(blocks[i].interactable == true) {
-      if(Math.abs(blocks[i].coordX-characterX) == 1 && Math.abs(blocks[i].coordY-characterY)) {
+
+  //interaction
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i].interactable == true) {
+      if (Math.abs(blocks[i].coordX - characterX) == 1 && Math.abs(blocks[i].coordY - characterY)) {
         //player is near an interactable thing
       }
     }
-    
+
     /*
     if(currentDir == UP_ARROW) {
       
@@ -149,23 +162,32 @@ function draw() {
   //player :)
   image(character, wWidth / 2, wHeight / 2, 80, 80);
   rectMode(CORNER);
-  stroke("black")
-  fill("red")
-  for(var i = 0; i < buttons.length; i++) {
-    buttons[i].display();
-    if(buttons[i].buttonCheck((buttons[i].w + buttons[i].h / 2)/10)) {
-      //check the button type
-      //do whatever is needed based on the button type
-      if(buttons[i].type == "inventory") {
-        currentState = "inventory"
-        
-        
+  stroke("black");
+  fill("red");
+
+
+
+  if (currentState == INVENTORY) {
+    imageMode(CORNER);
+    image(menuBackground, 150, 50, 700, 400);
+    for (var x = 0; x < 40; x++) {
+      for (var y = 0; y < 20; y++) {
       }
     }
   }
-  if(currentState == "inventory") {
-    imageMode(CORNER);
-    image(menuBackground, 150, 50, 700, 400)
+  for (var i = 0; i < buttons.length; i++) {
+    //do the checking for the buttons
+    buttons[i].display();
+    if (buttons[i].buttonCheck((buttons[i].w + buttons[i].h / 2) / 30)) {
+      //check the button type
+      //do whatever is needed based on the button type
+      buttons[i].display();
+      if (buttons[i].type == "inventory" && currentState == IDLE) {
+        currentState = INVENTORY;
+      } else if (buttons[i].type == "inventory" && currentState == INVENTORY) {
+        currentState = IDLE;
+      }
+    }
   }
   noFill();
 }
