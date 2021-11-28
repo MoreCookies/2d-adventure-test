@@ -1,5 +1,5 @@
 function collisionDetection() {
-  if (keyIsPressed && moving == false) {
+  if (keyIsDown(UP_ARROW) || keyIsDown(DOWN_ARROW) || keyIsDown(RIGHT_ARROW) || keyIsDown(LEFT_ARROW) && moving == false) {
     if (keyCode == UP_ARROW || keyCode == DOWN_ARROW || keyCode == LEFT_ARROW || keyCode == RIGHT_ARROW) {
       moving = true;
       currentDir = keyCode;

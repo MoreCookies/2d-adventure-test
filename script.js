@@ -178,6 +178,12 @@ function draw() {
   for (var i = 0; i < buttons.length; i++) {
     //do the checking for the buttons
     buttons[i].display();
+  }
+  noFill();
+}
+
+function mouseClicked() {
+  for (var i = 0; i < buttons.length; i++) {
     if (buttons[i].buttonCheck((buttons[i].w + buttons[i].h / 2) / 30)) {
       //check the button type
       //do whatever is needed based on the button type
@@ -189,5 +195,5 @@ function draw() {
       }
     }
   }
-  noFill();
+
 }

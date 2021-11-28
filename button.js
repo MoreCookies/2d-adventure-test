@@ -10,7 +10,8 @@ class button {
   }
 
   buttonCheck(big) {
-    if(mouseX > this.x-big && mouseX < this.x+this.w+big && mouseY > this.y-big && mouseY < this.y+this.h+big && mouseIsPressed) {
+    //do note that i did remove mouseIsPressed from this if statement, if needed for logic purposes, you may redo it.
+    if(mouseX > this.x-big && mouseX < this.x+this.w+big && mouseY > this.y-big && mouseY < this.y+this.h+big) {
       return true
     }
     return false
