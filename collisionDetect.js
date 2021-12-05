@@ -1,9 +1,18 @@
 function collisionDetection() {
+  if (keyIsDown(UP_ARROW)) {
+    currentDir = UP_ARROW
+  } else if (keyIsDown(DOWN_ARROW)) {
+    currentDir = DOWN_ARROW
+  } else if (keyIsDown(LEFT_ARROW)) {
+    currentDir = LEFT_ARROW
+  } else if (keyIsDown(RIGHT_ARROW)) {
+    currentDir = RIGHT_ARROW
+  }
   if (keyIsDown(UP_ARROW) || keyIsDown(DOWN_ARROW) || keyIsDown(RIGHT_ARROW) || keyIsDown(LEFT_ARROW) && moving == false) {
+    moving = true;
+    
     if (keyCode == UP_ARROW || keyCode == DOWN_ARROW || keyCode == LEFT_ARROW || keyCode == RIGHT_ARROW) {
-      moving = true;
-      currentDir = keyCode;
-      
+
       if (currentDir == UP_ARROW) {
         //up
         //movementBlock = new block(50, 50, (wWidth / 2), (wHeight / 2) - 50, speed, false, borderImg, "move");

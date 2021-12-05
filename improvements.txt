@@ -1,3 +1,23 @@
+fix movement system - COMPLETE
+
+
+ALERTS
+
+ALERTS notes
+
+
+REALISTIC UPCOMING UPDATES
+-scale canvas size to window size so no scroll-y to the side
+haha brr
+-make 2x2 block and test if it scrolls well
+-add interaction
+-make character and inventory menu
+  -modify inventory menu
+  -individually create slots for each thing in inventory by looping through inventory array
+  -also like add that cool thing which shows your character and what it's wearing but thats kinda far
+
+other cool stuff i should add
+
 make more wildlife
 
 make combat system

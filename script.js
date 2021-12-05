@@ -2,11 +2,11 @@ var characterX = 0;
 var characterY = 0;
 var wWidth = 1000;
 var wHeight = 500;
-var fr = 25;
+var fr = 50; //i hope your computer can run 50 fps lol
 var moving = false;
 let fCount = 0;
 var currentDir = null;
-let speed = fr / 5;
+let speed = fr / 10;
 var blocks = [];
 var blockPriority = { "grass": 1, "rock": 3, "water": 0, "berry": 2 };
 var health = 100;
@@ -31,8 +31,6 @@ function preload() {
   berryImg = loadImage("blocks/berry-bush.png");
   invButtonImg = loadImage("menu/inventory-icon.png");
   menuBackground = loadImage("menu/menu-background.png");
-  xImg = loadImage("menu/close.png");
-  xImg.resize(50, 50);
 }
 
 function setup() {
@@ -103,9 +101,8 @@ function draw() {
   }
   if (moving == false) {
     currentDir = keyCode;
-  }
-  if (moving == false) {
-    collisionDetection();
+  
+  collisionDetection();
   }
   background("cyan");
   rectMode(CENTER);
