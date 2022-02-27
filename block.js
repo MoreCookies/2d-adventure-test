@@ -11,7 +11,8 @@ class block {
 		this.coordY = round((this.osY - (wHeight / 2)) / (50 * -1));
     this.type = type;
     this.interactable = interactable;
-		
+		this.currentState = false; //supposed to change when interacted with
+
 		this.collidable = collidable;
     this.blockImg = blockImg;
 		//console.log("X coord: " + this.coordX + " Y coord: " + this.coordY)

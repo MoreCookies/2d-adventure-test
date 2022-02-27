@@ -1,4 +1,4 @@
-var characterX = 0;
+ var characterX = 0;
 var characterY = 0;
 var wWidth = 1000;
 var wHeight = 500;
@@ -31,6 +31,8 @@ function preload() {
   berryImg = loadImage("blocks/berry-bush.png");
   invButtonImg = loadImage("menu/inventory-icon.png");
   menuBackground = loadImage("menu/menu-background.png");
+  interactImg = loadImage("menu/interact.png");
+  
 }
 
 function setup() {
@@ -135,12 +137,34 @@ function draw() {
     //movementBlock.display();
     //movementBlock.update(currentDir, speed);
   }
-
+  //player :)
+  image(character, wWidth / 2, wHeight / 2, 80, 80);
+  rectMode(CORNER);
+  stroke("black");
+  fill("red");
   //interaction
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].interactable == true) {
-      if (Math.abs(blocks[i].coordX - characterX) == 1 && Math.abs(blocks[i].coordY - characterY)) {
+      if (Math.abs(blocks[i].coordX - characterX) <= 1 && Math.abs(blocks[i].coordY - characterY) <= 1) {
         //player is near an interactable thing
+        if(currentDir == UP_ARROW) {
+          
+        } else if(currentDir == DOWN_ARROW) {
+
+        } else if(currentDir == LEFT_ARROW) {
+
+        } else if(currentDir == RIGHT_ARROW) {
+
+        }
+        image(interactImg, blocks[i].osX, blocks[i].osY, 25, 25)
+        /*
+        if(keyCode == ) {
+          if(block[i].type == "bush")...
+          Basically, check the type of the block
+          then update the interacted variable in it
+          and then do the function which like idk gives you berries or smth
+        }
+        */
       }
     }
 
@@ -156,11 +180,7 @@ function draw() {
     }
     */
   }
-  //player :)
-  image(character, wWidth / 2, wHeight / 2, 80, 80);
-  rectMode(CORNER);
-  stroke("black");
-  fill("red");
+  
 
 
 
@@ -177,6 +197,8 @@ function draw() {
     buttons[i].display();
   }
   noFill();
+  //debuggin text pog
+  text("x: " + characterX + " y: " + characterY + " CurrentDir: " + currentDir, 100, 100)
 }
 
 function mouseClicked() {
