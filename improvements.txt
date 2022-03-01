@@ -35,3 +35,14 @@ inventory
 -pick up items
 -equipment
 --player attributes
+
+
+idea for interaction and inventory
+create list of all items and give them the following properties
+-item id
+-itemtype
+-itemvalues
+-itemimage
+
+to create the inventory, whenever interacting with a thing just like
+the block is binded to a certain item (can be changed with like rng or something)

@@ -2,7 +2,7 @@
 var characterY = 0;
 var wWidth = 1000;
 var wHeight = 500;
-var fr = 50; //i hope your computer can run 50 fps lol
+var fr = 50; //i hope your computer can run 50 fps lol :oyes:
 var moving = false;
 let fCount = 0;
 var currentDir = null;
