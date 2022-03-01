@@ -6,7 +6,7 @@ var fr = 50; //i hope your computer can run 50 fps lol
 var moving = false;
 let fCount = 0;
 var currentDir = null;
-let speed = fr / 10;
+let speed = fr / 5;
 var blocks = [];
 var blockPriority = { "grass": 1, "rock": 3, "water": 0, "berry": 2 };
 var health = 100;
@@ -24,11 +24,11 @@ var currentState = IDLE;
 
 function preload() {
   character = loadImage("character.png");
-  grassImg = loadImage("blocks/Grass.png");
-  waterImg = loadImage("blocks/Water.png");
-  rockImg = loadImage("blocks/ronk.png");
+  grassImg = loadImage("Blocks/Grass.png");
+  waterImg = loadImage("Blocks/Water.png");
+  rockImg = loadImage("Blocks/Rock.png");
   borderImg = loadImage("Border.png");
-  berryImg = loadImage("blocks/berry-bush.png");
+  berryImg = loadImage("Blocks/Berry-Bush.png");
   invButtonImg = loadImage("menu/inventory-icon.png");
   menuBackground = loadImage("menu/menu-background.png");
   interactImg = loadImage("menu/interact.png");

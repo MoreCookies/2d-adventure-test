@@ -18,7 +18,12 @@ haha brr
 
 other cool stuff i should add
 
-make more wildlife
+Make more wildlife
+- Trees
+- Animals
+  - Cows, Chickens, Sheep (etc.)
+- add ferns and grass
+- 
 
 make combat system
 -add atributes to enemies
