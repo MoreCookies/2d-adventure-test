@@ -37,5 +37,4 @@ class block {
 	display() {
 		image(this.blockImg, this.osX, this.osY, this.width, this.height)
 	}
-
 }

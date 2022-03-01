@@ -12,10 +12,10 @@ function collisionDetection() {
     moving = true;
     
     if (keyCode == UP_ARROW || keyCode == DOWN_ARROW || keyCode == LEFT_ARROW || keyCode == RIGHT_ARROW) {
-
+      
       if (currentDir == UP_ARROW) {
         //up
-        //movementBlock = new block(50, 50, (wWidth / 2), (wHeight / 2) - 50, speed, false, borderImg, "move");
+        movementBlock = new block(50, 50, (wWidth / 2), (wHeight / 2) - 50, speed, false, borderImg, "move", false);
         characterY += 1;
         for (var a = 0; a < blocks.length; a++) {
           //if move up, is the coords of the player the same as the block? if so, don't move.
@@ -28,7 +28,7 @@ function collisionDetection() {
         }
       } else if (currentDir == DOWN_ARROW) {
         //down
-        //movementBlock = new block(50, 50, (wWidth / 2), (wHeight / 2) + 50, speed, false, borderImg, "move");
+        movementBlock = new block(50, 50, (wWidth / 2), (wHeight / 2) + 50, speed, false, borderImg, "move", false);
         characterY -= 1;
         for (var b = 0; b < blocks.length; b++) {
           if (blocks[b].collidable == true) {
@@ -40,7 +40,7 @@ function collisionDetection() {
         }
       } else if (currentDir == LEFT_ARROW) {
         //left
-        //movementBlock = new block(50, 50, (wWidth / 2) - 50, (wHeight / 2), speed, false, borderImg, "move");
+        movementBlock = new block(50, 50, (wWidth / 2) - 50, (wHeight / 2), speed, false, borderImg, "move", false);
         characterX += 1;
         for (var c = 0; c < blocks.length; c++) {
           //if move up, is the coords of the player the same as the block? if so, don't move.
@@ -53,7 +53,7 @@ function collisionDetection() {
         }
       } else if (currentDir == RIGHT_ARROW) {
         //right
-        //movementBlock = new block(50, 50, (wWidth / 2) + 50, (wHeight / 2), speed, false, borderImg, "move");
+        movementBlock = new block(50, 50, (wWidth / 2) + 50, (wHeight / 2), speed, false, borderImg, "move", false);
         characterX -= 1;
         for (var d = 0; d < blocks.length; d++) {
           //if move up, is the coords of the player the same as the block? if so, don't move.
@@ -65,6 +65,8 @@ function collisionDetection() {
           }
         }
       }
+      blocks.pop()
+      blocks.push(movementBlock);
     }
   }
 }

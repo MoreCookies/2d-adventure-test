@@ -1,4 +1,4 @@
- var characterX = 0;
+var characterX = 0;
 var characterY = 0;
 var wWidth = 1000;
 var wHeight = 500;
@@ -6,9 +6,9 @@ var fr = 50; //i hope your computer can run 50 fps lol :oyes:
 var moving = false;
 let fCount = 0;
 var currentDir = null;
-let speed = fr / 10;
+let speed = fr / 5;
 var blocks = [];
-var blockPriority = { "grass": 1, "rock": 3, "water": 0, "berry": 2 };
+var blockPriority = { "grass": 2, "rock": 4, "water": 0, "berry": 3, "move": 5, "sand": 1};
 var health = 100;
 var maxHealth = 100;
 var randomObject = 0;
@@ -21,14 +21,16 @@ const IDLE = 1;
 const INVENTORY = 2;
 //current state
 var currentState = IDLE;
+var canInt = false;
 
 function preload() {
   character = loadImage("character.png");
-  grassImg = loadImage("blocks/Grass.png");
-  waterImg = loadImage("blocks/Water.png");
-  rockImg = loadImage("blocks/ronk.png");
+  grassImg = loadImage("Blocks/Grass.png");
+  waterImg = loadImage("Blocks/Water.png");
+  rockImg = loadImage("Blocks/Rock1.png");
   borderImg = loadImage("Border.png");
-  berryImg = loadImage("blocks/berry-bush.png");
+  berryImg = loadImage("Blocks/berry-bush.png");
+	sandImg = loadImage("Blocks/Sand.png");
   invButtonImg = loadImage("menu/inventory-icon.png");
   menuBackground = loadImage("menu/menu-background.png");
   interactImg = loadImage("menu/interact.png");
@@ -40,12 +42,17 @@ function setup() {
   buttons.push(menuButton);
   createCanvas(wWidth, wHeight);
 
-  for (var x = 0; x < 12; x++) {
-    for (var y = 0; y < 12; y++) {
+  for (var x = 0; x < 36; x++) {
+    for (var y = 0; y < 36; y++) {
       blocks.push(new block(50, 50, x * 50, y * 50, speed, false, grassImg, "grass", false));
     }
   }
 
+  for(var n = -2; n < 38; n++) {
+    for (var l = -2; l < 38; l++) {
+      blocks.push(new block(50, 50, n * 50, l * 50, speed, false, sandImg, "sand", false));
+    }
+  }
   for (var x = 0; x < 12; x++) {
     for (var y = 0; y < 12; y++) {
       randomObject = round(random(0.5, 10));
@@ -60,8 +67,8 @@ function setup() {
       blocks.push(new block(50, 50, x * 50, y * 50, speed, true, rockImg, "rock", false));
     }
   }
-  for (var x = -15; x < 25; x++) {
-    for (var y = -25; y < 20; y++) {
+  for (var x = -15; x < 75; x++) {
+    for (var y = -25; y < 60; y++) {
       blocks.push(new block(50, 50, x * 50, y * 50, speed, true, waterImg, "water", false));
     }
   }
@@ -147,24 +154,32 @@ function draw() {
     if (blocks[i].interactable == true) {
       if (Math.abs(blocks[i].coordX - characterX) <= 1 && Math.abs(blocks[i].coordY - characterY) <= 1) {
         //player is near an interactable thing
-        if(currentDir == UP_ARROW) {
+        if(currentDir == UP_ARROW && blocks[i].coordX == characterX && blocks[i].coordY == characterY+1) {
+            image(interactImg, blocks[i].osX, blocks[i].osY, 25, 25)
+          canInt = true
+        } else if(currentDir == DOWN_ARROW && blocks[i].coordX == characterX && blocks[i].coordY == characterY-1) {
+          image(interactImg, blocks[i].osX, blocks[i].osY, 25, 25)
+          canInt = true
+        } else if(currentDir == LEFT_ARROW && blocks[i].coordY == characterY && blocks[i].coordX == characterX+1) {
+          image(interactImg, blocks[i].osX, blocks[i].osY, 25, 25)
+          canInt = true
+        } else if(currentDir == RIGHT_ARROW && blocks[i].coordY == characterY && blocks[i].coordX == characterX-1) {
+          image(interactImg, blocks[i].osX, blocks[i].osY, 25, 25)
+          canInt = true
+        } else {
+          canInt = false
+        }
+        
+        if(blocks[i] != undefined && keyCode == "69" && canInt == true) {
+          if(blocks[i].type != "move") {
+            console.log("sus")
+            if(blocks[i].interactable == "true") {
+              console.log("nice you interacted with the berry")
+            }
+          }
           
-        } else if(currentDir == DOWN_ARROW) {
-
-        } else if(currentDir == LEFT_ARROW) {
-
-        } else if(currentDir == RIGHT_ARROW) {
-
         }
-        image(interactImg, blocks[i].osX, blocks[i].osY, 25, 25)
-        /*
-        if(keyCode == ) {
-          if(block[i].type == "bush")...
-          Basically, check the type of the block
-          then update the interacted variable in it
-          and then do the function which like idk gives you berries or smth
-        }
-        */
+        
       }
     }
 
