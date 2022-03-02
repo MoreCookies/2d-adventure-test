@@ -109,8 +109,6 @@ function draw() {
     fCount += 1;
   }
   if (moving == false) {
-    currentDir = keyCode;
-  
   collisionDetection();
   }
   background("cyan");
@@ -172,12 +170,12 @@ function draw() {
         
         if(blocks[i] != undefined && keyCode == "69" && canInt == true) {
           if(blocks[i].type != "move") {
-            console.log("sus")
+            console.log(blocks[i].type)
             if(blocks[i].interactable == "true") {
               console.log("nice you interacted with the berry")
             }
           }
-          
+          canInt = false;
         }
         
       }
@@ -213,6 +211,7 @@ function draw() {
   }
   noFill();
   //debuggin text pog
+  stroke("blue")
   text("x: " + characterX + " y: " + characterY + " CurrentDir: " + currentDir, 100, 100)
 }
 

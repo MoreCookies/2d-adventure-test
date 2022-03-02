@@ -12,7 +12,7 @@ function collisionDetection() {
     moving = true;
     
     if (keyCode == UP_ARROW || keyCode == DOWN_ARROW || keyCode == LEFT_ARROW || keyCode == RIGHT_ARROW) {
-      
+
       if (currentDir == UP_ARROW) {
         //up
         movementBlock = new block(50, 50, (wWidth / 2), (wHeight / 2) - 50, speed, false, borderImg, "move", false);
@@ -65,8 +65,7 @@ function collisionDetection() {
           }
         }
       }
-      blocks.pop()
-      blocks.push(movementBlock);
+      
     }
   }
 }
